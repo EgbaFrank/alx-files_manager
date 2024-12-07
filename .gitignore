@@ -10,3 +10,4 @@ coverage/
 *.swo
 *.swn
 .vscode/
+package-lock.json
