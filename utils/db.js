@@ -7,10 +7,8 @@ const DB_DATABASE = process.env.DB_DATABASE || 'file_manager';
 class DBClient {
   constructor() {
     this.client = new MongoClient(`mongodb://${DB_HOST}:${DB_PORT}`, { useUnifiedTopology: true });
-    this.db = null;
     this.usersCollection = null;
     this.filesCollection = null;
-    this.connect();
   }
 
   async connect() {
@@ -20,13 +18,12 @@ class DBClient {
       this.usersCollection = this.db.collection('users');
       this.filesCollection = this.db.collection('files');
     } catch (err) {
-      console.log(err);
-      this.db = null;
+      console.error(err);
     }
   }
 
   isAlive() {
-    return !!this.db;
+    return this.client.topology && this.client.topology.isConnected();
   }
 
   async nbUsers() {
@@ -39,4 +36,6 @@ class DBClient {
 }
 
 const dbClient = new DBClient();
+dbClient.connect().catch((err) => console.error('Connection failed:', err));
+
 export default dbClient;
