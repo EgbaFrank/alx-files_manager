@@ -6,16 +6,23 @@ const DB_DATABASE = process.env.DB_DATABASE || 'file_manager';
 
 class DBClient {
   constructor() {
-    MongoClient.connect(`mongodb://${DB_HOST}:${DB_PORT}`, (err, client) => {
-      if (err) {
-        console.log(err);
-        this.db = null;
-      } else {
-        this.db = client.db(DB_DATABASE);
-        this.usersCollection = this.db.collection('users');
-        this.filesCollection = this.db.collection('files');
-      }
-    });
+    this.client = new MongoClient(`mongodb://${DB_HOST}:${DB_PORT}`, { useUnifiedTopology: true });
+    this.db = null;
+    this.usersCollection = null;
+    this.filesCollection = null;
+    this.connect();
+  }
+
+  async connect() {
+    try {
+      await this.client.connect();
+      this.db = this.client.db(DB_DATABASE);
+      this.usersCollection = this.db.collection('users');
+      this.filesCollection = this.db.collection('files');
+    } catch (err) {
+      console.log(err);
+      this.db = null;
+    }
   }
 
   isAlive() {
@@ -31,4 +38,5 @@ class DBClient {
   }
 }
 
-export default new DBClient();
+const dbClient = new DBClient();
+export default dbClient;
