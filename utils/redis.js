@@ -9,7 +9,7 @@ class RedisClient {
       console.log(`Error ${err}`);
     });
     this.client.on('connect', () => {
-       console.log('Redis client connected to the server');
+      console.log('Redis client connected to the server');
     });
   }
 
