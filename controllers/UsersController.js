@@ -1,4 +1,5 @@
 import sha1 from 'sha1';
+import { ObjectId } from 'mongodb';
 import dbClient from '../utils/db';
 import redisClient from '../utils/redis';
 
@@ -9,20 +10,17 @@ class UsersController {
       const { email, password } = req.body;
 
       if (!email) {
-        res.status(400).json({ error: 'Missing email' });
-        return;
+        return res.status(400).json({ error: 'Missing email' });
       }
 
       if (!password) {
-        res.status(400).json({ error: 'Missing password' });
-        return;
+        return res.status(400).json({ error: 'Missing password' });
       }
 
       const existingUser = await dbClient.usersCollection.findOne({ email });
 
       if (existingUser) {
-        res.status(400).json({ error: 'Already exist' });
-        return;
+        return res.status(400).json({ error: 'Already exist' });
       }
       const hashedPassword = sha1(password);
 
@@ -31,10 +29,10 @@ class UsersController {
         password: hashedPassword,
       });
 
-      res.status(201).json({ id: result.insertedId, email });
+      return res.status(201).json({ id: result.insertedId, email });
     } catch (err) {
       console.error('Error in postNew:', err);
-      res.status(500).json({ error: 'Internal server error' });
+      return res.status(500).json({ error: 'Internal server error' });
     }
   }
 
@@ -42,24 +40,21 @@ class UsersController {
     try {
       const token = req.header('X-Token');
       if (!token) {
-        res.status(401).json({ error: 'Unauthorized' });
-        return;
+        return res.status(401).json({ error: 'Unauthorized' });
       }
       const userId = await redisClient.get(`auth_${token}`);
       if (!userId) {
-        res.status(401).json({ error: 'Unauthorized' });
-        return;
+        return res.status(401).json({ error: 'Unauthorized' });
       }
-      const user = await dbClient.usersCollection.findOne({ _id: userId });
+      const user = await dbClient.usersCollection.findOne({ _id: new ObjectId(userId) });
       if (!user) {
-        res.status(401).json({ error: 'Unauthorized' });
-        return;
+        return res.status(401).json({ error: 'Unauthorized' });
       }
       delete user.password;
-      res.status(200).json(user);
+      return res.status(200).json(user);
     } catch (err) {
       console.error('Error in getMe:', err);
-      res.status(500).json({ error: 'Internal server error' });
+      return res.status(500).json({ error: 'Internal server error' });
     }
   }
 }
