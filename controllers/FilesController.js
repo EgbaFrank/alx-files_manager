@@ -42,7 +42,7 @@ class FilesController {
     }
 
     if (parentId) {
-      const parentFile = dbClient.filesCollection.findOne({ _id: new ObjectId(parentId) });
+      const parentFile = await dbClient.filesCollection.findOne({ _id: new ObjectId(parentId) });
 
       if (!parentFile) {
         return res.status(400).json({ error: 'Parent not found' });
@@ -52,6 +52,7 @@ class FilesController {
         return res.status(400).json({ error: 'Parent is not a folder' });
       }
     }
+
     if (type === 'folder') {
       const newFolder = await dbClient.filesCollection.insertOne({
         userId,
@@ -69,6 +70,7 @@ class FilesController {
         parentId: parentId || 0,
       });
     }
+
     try {
       const folderPath = process.env.FOLDER_PATH || '/tmp/files_manager';
       const filePath = path.join(folderPath, uuid4());
