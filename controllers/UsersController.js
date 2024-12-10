@@ -6,7 +6,6 @@ import redisClient from '../utils/redis';
 class UsersController {
   static async postNew(req, res) {
     try {
-      console.log(req.body);
       const { email, password } = req.body;
 
       if (!email) {
