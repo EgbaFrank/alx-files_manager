@@ -78,7 +78,7 @@ class FilesController {
       const folderPath = process.env.FOLDER_PATH || '/tmp/files_manager';
       const filePath = path.join(folderPath, uuid4());
 
-      const decodedData = Buffer.from(data, 'base64')
+      const decodedData = Buffer.from(data, 'base64');
 
       if (!fs.existsSync(folderPath)) {
         fs.mkdirSync(folderPath, { recursive: true });
