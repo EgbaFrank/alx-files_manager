@@ -8,30 +8,17 @@ on:
     branches: [ "main", "master" ]
 
 jobs:
-  test:
-    # Run on different operating systems and Node.js versions for comprehensive testing
-    strategy:
-      matrix:
-        os: [ubuntu-latest]
-        node-version: [10.x]
-
-    runs-on: ${{ matrix.os }}
-
+  build:
+    runs-on: ubuntu-latest
+    services:
+      redis:
+        image: redis
+        ports:
+          - 6379:6379
     steps:
-      # Checkout the repository code
-      - uses: actions/checkout@v4
-
-      # Setup Node.js with the matrix-defined version
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ matrix.node-version }}
-          cache: 'npm'
-
-      # Install dependencies
+      - name: Checkout code
+        uses: actions/checkout@v2
       - name: Install dependencies
         run: npm install
-
-      # Run tests using Mocha, specifying the tests/ directory
-      - name: Run Mocha tests
-        run: npm test tests/**/*.test.js
+      - name: Run tests
+        run: npm test
