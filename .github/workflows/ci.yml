@@ -28,8 +28,10 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
 
+      # Install dependencies
+      - name: Install dependencies
+        run: npm install
+
       # Run tests using Mocha, specifying the tests/ directory
       - name: Run Mocha tests
-        run: |
-          npm config set registry https://registry.npmjs.org/
-          npm install --verbose --fetch-timeout 600000
+        run: npm test tests/**/*.test.js
