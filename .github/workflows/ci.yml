@@ -29,5 +29,8 @@ jobs:
           DB_port: 27017
           DB_DATABASE: file_manager
 
+      - name: Run the node server
+        run: npm run dev &
+
       - name: Run tests
         run: npm test tests/**/*.test.js
