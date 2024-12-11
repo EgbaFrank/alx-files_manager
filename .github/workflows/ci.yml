@@ -13,6 +13,7 @@ jobs:
     services:
       redis:
         image: redis
+        options: --sysctl vm.overcommit_memory=1
         ports:
           - 6379:6379
       mongodb:

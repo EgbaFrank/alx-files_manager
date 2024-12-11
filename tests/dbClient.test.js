@@ -20,22 +20,21 @@ describe('db client', () => {
     expect(dbClient.isAlive()).to.equal(true);
   });
 
-    it('Number of user documents', async () => {
-        await dbClient.usersCollection.deleteMany({});
-        expect(await dbClient.nbUsers()).to.equal(0);
+  it('number of user documents', async () => {
+    await dbClient.usersCollection.deleteMany({});
+    expect(await dbClient.nbUsers()).to.equal(0);
 
-        await dbClient.usersCollection.insertOne({ name: 'Micheal Scott' });
-        await dbClient.usersCollection.insertOne({ name: 'Sawyer' });
-        expect(await dbClient.nbUsers()).to.equal(2);
-    });
+    await dbClient.usersCollection.insertOne({ name: 'Micheal Scott' });
+    await dbClient.usersCollection.insertOne({ name: 'Sawyer' });
+    expect(await dbClient.nbUsers()).to.equal(2);
+  });
 
-    it('Number of file documents', async () => {
-        await dbClient.filesCollection.deleteMany({});
-        expect(await dbClient.nbFiles()).to.equal(0);
+  it('number of file documents', async () => {
+    await dbClient.filesCollection.deleteMany({});
+    expect(await dbClient.nbFiles()).to.equal(0);
 
-        await dbClient.filesCollection.insertOne({ name: 'kateFile' });
-        await dbClient.filesCollection.insertOne({ name: 'ClaireFile' });
-        expect(await dbClient.nbUsers()).to.equal(2);
-    });
-});
+    await dbClient.filesCollection.insertOne({ name: 'kateFile' });
+    await dbClient.filesCollection.insertOne({ name: 'ClaireFile' });
+    expect(await dbClient.nbUsers()).to.equal(2);
+  });
 });
