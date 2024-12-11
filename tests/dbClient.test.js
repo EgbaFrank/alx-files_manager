@@ -18,7 +18,6 @@ describe('db client', () => {
   after(async () => {
     await dbClient.usersCollection.deleteMany({});
     await dbClient.filesCollection.deleteMany({});
-    await connection.close(); // Ensure the connection is closed after tests
   });
 
   it('does the connection is alive', async () => {
