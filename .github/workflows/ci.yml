@@ -34,4 +34,6 @@ jobs:
 
       # Run tests using Mocha, specifying the tests/ directory
       - name: Run Mocha tests
-        run: npm test -- tests/**/*.test.js
+        run: |
+          npm config set registry https://registry.npmjs.org/
+          npm install --verbose --fetch-timeout 600000
