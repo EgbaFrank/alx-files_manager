@@ -6,9 +6,6 @@ use(chaiHttp);
 should();
 
 describe('db client', () => {
-  let connection;
-  let db;
-
   before(async () => {
     dbClient.connect();
     await dbClient.usersCollection.deleteMany({});
