@@ -12,11 +12,12 @@ class DBClient {
   async connect() {
     try {
       await this.client.connect();
-      this.db = this.client.db(DB_DATABASE);
+      this.db = await this.client.db(DB_DATABASE);
       this.usersCollection = this.db.collection('users');
       this.filesCollection = this.db.collection('files');
     } catch (err) {
       console.error(err);
+      this.db = false;
     }
   }
 
