@@ -1,4 +1,5 @@
 import sha1 from 'sha1';
+import Queue from 'bull';
 import { ObjectId } from 'mongodb';
 import dbClient from '../utils/db';
 import redisClient from '../utils/redis';
@@ -15,7 +16,6 @@ class UsersController {
       if (!password) {
         return res.status(400).json({ error: 'Missing password' });
       }
-
       const existingUser = await dbClient.usersCollection.findOne({ email });
 
       if (existingUser) {
@@ -27,6 +27,9 @@ class UsersController {
         email,
         password: hashedPassword,
       });
+
+      const userQueue = new Queue('userQueue');
+      userQueue.add({ userId: result.insertedId });
 
       return res.status(201).json({ id: result.insertedId, email });
     } catch (err) {
