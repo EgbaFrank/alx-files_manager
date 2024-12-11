@@ -1,5 +1,6 @@
 import fs from 'fs';
 import path from 'path';
+import Queue from 'bull';
 import { ObjectId } from 'mongodb';
 import { v4 as uuid4 } from 'uuid';
 import mime from 'mime-types';
@@ -62,6 +63,7 @@ class FilesController {
         isPublic: isPublic || false,
         parentId: parentId || 0,
       });
+
       return res.status(201).json({
         id: newFolder.insertedId,
         userId,
@@ -76,7 +78,7 @@ class FilesController {
       const folderPath = process.env.FOLDER_PATH || '/tmp/files_manager';
       const filePath = path.join(folderPath, uuid4());
 
-      const decodedData = Buffer.from(data, 'base64').toString('utf-8');
+      const decodedData = Buffer.from(data, 'base64')
 
       if (!fs.existsSync(folderPath)) {
         fs.mkdirSync(folderPath, { recursive: true });
@@ -91,6 +93,10 @@ class FilesController {
         parentId: parentId || 0,
         localPath: filePath,
       });
+      if (type === 'image') {
+        const fileQueue = new Queue('fileQueue');
+        fileQueue.add({ userId, fileId: newFile.insertedId });
+      }
 
       return res.status(201).json({
         id: newFile.insertedId,
