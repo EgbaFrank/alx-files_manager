@@ -34,4 +34,4 @@ jobs:
 
       # Run tests using Mocha, specifying the tests/ directory
       - name: Run Mocha tests
-        run: npx mocha 'tests/**/*.js'
+        run: npm test -- tests/**/*.test.js
