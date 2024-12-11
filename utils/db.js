@@ -35,6 +35,6 @@ class DBClient {
 }
 
 const dbClient = new DBClient();
-// dbClient.connect().catch((err) => console.error('Connection failed:', err));
+dbClient.connect().catch((err) => console.error('Connection failed:', err));
 
 export default dbClient;
