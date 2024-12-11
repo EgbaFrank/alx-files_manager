@@ -26,4 +26,9 @@ describe('redis Client', () => {
   it('set key can be called without issue', async () => {
     expect(await redisClient.set('myKey', 12, 1)).to.equal(undefined);
   });
+  it('returns a key with null because it\'s expired', async () => {
+    const sleep = promisify(setTimeout);
+    await sleep(1200);
+    expect(await redisClient.get('myKey')).to.equal(null);
+  });
 });
