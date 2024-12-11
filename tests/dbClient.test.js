@@ -1,19 +1,24 @@
 import { expect, use, should } from 'chai';
 import chaiHttp from 'chai-http';
-import { promisify } from 'util';
 import dbClient from '../utils/db';
 
 use(chaiHttp);
 should();
 
 describe('db client', () => {
+  let connection;
+  let db;
+
   before(async () => {
+    dbClient.connect();
     await dbClient.usersCollection.deleteMany({});
     await dbClient.filesCollection.deleteMany({});
   });
+
   after(async () => {
     await dbClient.usersCollection.deleteMany({});
     await dbClient.filesCollection.deleteMany({});
+    await connection.close(); // Ensure the connection is closed after tests
   });
 
   it('does the connection is alive', async () => {
