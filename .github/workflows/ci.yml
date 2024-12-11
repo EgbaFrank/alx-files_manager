@@ -13,8 +13,13 @@ jobs:
     services:
       redis:
         image: redis
+        options: --sysctl vm.overcommit_memory=1
         ports:
           - 6379:6379
+      mongodb:
+        image: mongo
+        ports:
+          - 27017:27017
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
