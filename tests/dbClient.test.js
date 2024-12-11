@@ -7,6 +7,7 @@ should();
 
 describe('db client', () => {
   before(async () => {
+    await dbClient.connect();
     await dbClient.usersCollection.deleteMany({});
     await dbClient.filesCollection.deleteMany({});
   });

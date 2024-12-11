@@ -29,10 +29,6 @@ class RedisClient {
   async del(key) {
     await this.client.del(key);
   }
-
-  async close() {
-    await this.client.close();
-  }
 }
 
 export default new RedisClient();
