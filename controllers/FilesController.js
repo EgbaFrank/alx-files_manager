@@ -3,6 +3,7 @@ import path from 'path';
 import Queue from 'bull';
 import { ObjectId } from 'mongodb';
 import { v4 as uuid4 } from 'uuid';
+import mime from 'mime-types';
 import dbClient from '../utils/db';
 import redisClient from '../utils/redis';
 
@@ -273,6 +274,39 @@ class FilesController {
       isPublic: false,
       parentId: file.parentId,
     });
+  }
+
+  static async getFile(req, res) {
+    const token = req.header('X-Token');
+
+    if (!token) {
+      return res.status(401).json({ error: 'Unauthorized' });
+    }
+
+    const userId = await redisClient.get(`auth_${token}`);
+
+    if (!userId) {
+      return res.status(401).json({ error: 'Unauthorized' });
+    }
+
+    const fileId = req.params.id;
+
+    if (!fileId) {
+      return res.status(404).json({ error: 'Not found' });
+    }
+
+    const file = await dbClient.filesCollection.findOne({ _id: new ObjectId(fileId) });
+
+    if (!file) {
+      return res.status(404).json({ error: 'Not found' });
+    }
+
+    if (!file.isPublic && file.userId.toString() !== userId) {
+      return res.status(403).json({ error: 'Forbidden' });
+    }
+
+    res.setHeader('Content-Type', mime.lookup(file.localPath) || 'text/plain');
+    return res.sendFile(file.localPath);
   }
 }
 

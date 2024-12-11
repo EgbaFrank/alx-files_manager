@@ -21,7 +21,7 @@ class DBClient {
   }
 
   isAlive() {
-    return this.client.topology && this.client.topology.isConnected();
+    return !!this.db;
   }
 
   async nbUsers() {
@@ -34,6 +34,6 @@ class DBClient {
 }
 
 const dbClient = new DBClient();
-dbClient.connect().catch((err) => console.error('Connection failed:', err));
+// dbClient.connect().catch((err) => console.error('Connection failed:', err));
 
 export default dbClient;

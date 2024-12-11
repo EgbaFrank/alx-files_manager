@@ -1,0 +1,36 @@
+name: JavaScript CI with Mocha
+
+on:
+  # Trigger the workflow on push and pull request events
+  push:
+    branches: [ "main", "master" ]
+  pull_request:
+    branches: [ "main", "master" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    services:
+      redis:
+        image: redis
+        ports:
+          - 6379:6379
+      mongodb:
+        image: mongo
+        ports:
+          - 27017:27017
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Install dependencies
+        run: npm install
+        env:
+          DB_HOST: mongodb://localhost:27017
+          DB_port: 27017
+          DB_DATABASE: files_manager
+
+      - name: Run the node server
+        run: npm run dev &
+
+      - name: Run tests
+        run: npm test tests/**/*.test.js
