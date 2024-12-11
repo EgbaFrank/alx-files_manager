@@ -28,10 +28,6 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
 
-      # Install dependencies
-      - name: Install dependencies
-        run: npm install
-
       # Run tests using Mocha, specifying the tests/ directory
       - name: Run Mocha tests
         run: |
