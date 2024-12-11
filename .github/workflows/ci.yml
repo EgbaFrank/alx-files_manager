@@ -27,7 +27,7 @@ jobs:
         env:
           DB_HOST: mongodb://localhost:27017
           DB_port: 27017
-          DB_DATABASE: file_manager
+          DB_DATABASE: files_manager
 
       - name: Run the node server
         run: npm run dev &
