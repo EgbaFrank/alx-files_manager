@@ -15,16 +15,16 @@ describe('redis Client', () => {
     await redisClient.client.flushall('ASYNC');
   });
 
-  it('shows that connection is alive', async () => {
+  it('does the connection is alive', async () => {
     expect(redisClient.isAlive()).to.equal(true);
   });
 
-  it('returns key as null because it does not exist', async () => {
-    expect(await redisClient.get('myKey')).to.equal(null);
+  it('returns null value because it\'s does not exist', async () => {
+    expect(await redisClient.get('Harry')).to.equal(null);
   });
 
   it('set key can be called without issue', async () => {
-    expect(await redisClient.set('myKey', 12, 1)).to.equal(undefined);
+    expect(await redisClient.set('Dunk', 12, 1)).to.equal(undefined);
   });
   it('returns a key with null because it\'s expired', async () => {
     const sleep = promisify(setTimeout);
