@@ -9,7 +9,7 @@ import dbClient from '../utils/db';
 describe('+ FilesController', () => {
   const baseDir = `${process.env.FOLDER_PATH || ''}`.trim().length > 0
     ? process.env.FOLDER_PATH.trim()
-    : joinPath(tmpdir(), DEFAULT_ROOT_FOLDER);
+    : joinPath(tmpdir(), 'files_manager');
   const mockUser = {
     email: 'katakuri@bigmom.com',
     password: 'mochi_mochi_whole_cake',
