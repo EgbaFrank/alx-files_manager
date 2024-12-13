@@ -132,14 +132,13 @@ class FilesController {
         return res.status(404).json({ error: 'Not found' });
       }
 
-      const file = await dbClient.filesCollection.findOne({ _id: new ObjectId(fileId) });
+      const file = await dbClient.filesCollection.findOne(
+        { _id: new ObjectId(fileId) },
+        { userId: new ObjectId(userId) },
+      );
 
       if (!file) {
         return res.status(404).json({ error: 'Not found' });
-      }
-
-      if (!file.isPublic && file.userId.toString() !== userId) {
-        return res.status(403).json({ error: 'Forbidden' });
       }
 
       return res.status(200).json({
@@ -301,8 +300,16 @@ class FilesController {
       return res.status(404).json({ error: 'Not found' });
     }
 
+    if (file.type === 'folder') {
+      return res.status(400).json({ error: "A folder doesn't have content" });
+    }
+
     if (!file.isPublic && file.userId.toString() !== userId) {
-      return res.status(403).json({ error: 'Forbidden' });
+      return res.status(404).json({ error: 'Not found' });
+    }
+
+    if (!fs.existsSync(file.localPath)) {
+      return res.status(404).json({ error: 'Not found' });
     }
 
     res.setHeader('Content-Type', mime.lookup(file.localPath) || 'text/plain');

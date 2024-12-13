@@ -52,8 +52,8 @@ class UsersController {
       if (!user) {
         return res.status(401).json({ error: 'Unauthorized' });
       }
-      const { password, _id, email } = user;
-      return res.status(200).json({id: _id, email});
+      const { _id, email } = user;
+      return res.status(200).json({ id: _id, email });
     } catch (err) {
       console.error('Error in getMe:', err);
       return res.status(500).json({ error: 'Internal server error' });
