@@ -32,9 +32,9 @@ describe('gET /stats', () => {
   });
 
   it('returns number of users and files in db 1 and 2 for this one', async () => {
-    await dbClient.usersCollection.insertOne({name: 'Larry'});
-    await dbClient.filesCollection.insertOne({name: 'image.png'});
-    await dbClient.filesCollection.insertOne({name: 'file.txt'});
+    await dbClient.usersCollection.insertOne({name: 'Konan'});
+    await dbClient.filesCollection.insertOne({name: 'elonmusk.png'});
+    await dbClient.filesCollection.insertOne({name: 'whomai.txt'});
 
     const response = await request(app).get('/stats').send();
     const body = JSON.parse(response.text);
